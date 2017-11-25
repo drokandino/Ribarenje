@@ -1,0 +1,8 @@
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+MBLUE = (124, 193, 207) #Moonstone blue
+EMR = (255, 167, 33)
+SPLAVA = (22, 202, 255)
