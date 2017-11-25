@@ -29,8 +29,8 @@ class Mreza:
 		self.y += self.yspeed #Mreza movement
 		self.x += self.xspeed
 		#Mreza walls Collision
-		if self.y + mreza_h >= 560: 
-			self.y = 560 - mreza_h	
+		if self.y + 65 >= 560: 
+			self.y = 490	
 			#print(slef.y)
 		if self.y <= floor_h:
 			self.y = floor_h
