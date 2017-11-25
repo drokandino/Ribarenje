@@ -4,7 +4,9 @@ import random
 
 pygame.init()
 
+#Creating gameSurface
 gameDisplay = pygame.display.set_mode((const.SCREEN_WIDTH, const.SCREEN_HEIGHT))
+
 pygame.display.set_caption("Ribicija")
 
 clock = pygame.time.Clock()
@@ -21,10 +23,10 @@ class Mreza:
 		self.y = y
 		self.xspeed = 0
 		self.yspeed = 0
-		self.mreza_slika = pygame.image.load("mreza_small.png")
+		self.mreza_slika = pygame.image.load("mreza_small.png") #Loading mreza image 
 	def drwa_mreza(self):
-		gameDisplay.blit(self.mreza_slika, (self.x, self.y))
-		self.y += self.yspeed
+		gameDisplay.blit(self.mreza_slika, (self.x, self.y)) #Loading mreza image into the surface
+		self.y += self.yspeed #Mreza movement
 		self.x += self.xspeed
 		#Mreza walls Collision
 		if self.y + mreza_h >= 560: 
@@ -61,23 +63,38 @@ class Riba:
 	floor_h = 40
 	riba_w = 50
 	riba_h = 23
-	def __init__(self, x, y, speed):
-		self.speed = speed
-		self.x = x
-		self.y = y
-		self.riba_slika = pygame.image.load("riba.png")
+	speed_min = 1
+	speed_max = 3
+	counter = True
+	k = 0
+	def __init__(self):
+		self.speed = random.randrange(Riba.speed_min, Riba.speed_max)
+		self.x = random.randrange(1000, 1500)
 		self.y = random.randrange(40, const.SCREEN_HEIGHT-80)
+		self.riba_slika = pygame.image.load("riba.png")
 	def draw_fish(self):
 		global mreza_w, score
 		gameDisplay.blit(self.riba_slika, (self.x, self.y))
 		self.x -= self.speed
 		if self.x <  0 :
-			self.x = const.SCREEN_WIDTH + 10
+			self.speed = random.randrange(Riba.speed_min, Riba.speed_max)
 			self.y = random.randrange(40, const.SCREEN_HEIGHT-40-floor_h)
-		#if mreza_x + mreza_w == self.x and mreza_y - 80 <= self.y and self.y >= mreza_y:
+			self.x = random.randrange(1000, 1500)
+		#Speeding up the fishes as the score increases
+		if score > 15*Riba.k and score < 30 * Riba.k:
+			Riba.counter = True
+		if score % 15 == 0 and score > 1 and Riba.counter == True: 
+			Riba.speed_min += 1
+			Riba.speed_max += 1
+			Riba.counter = False
+			Riba.k += 1
+		
+		#Mreza and Fish collision 
 		if mreza_x + mreza_w - 40 >= self.x and mreza_x + mreza_w <= self.x + Riba.riba_w and self.y >= mreza_y and self.y <= mreza_y + 50 :
 			self.x = random.randrange(1000, 1500) 
 			score += 1
+			self.y = random.randrange(40, const.SCREEN_HEIGHT-40-floor_h)
+			self.speed = random.randrange(Riba.speed_min, Riba.speed_max)
 			
 
 
@@ -91,18 +108,20 @@ floor_h = 40
 
 mreza = Mreza(200, 300)
 
-drugaRiba = Riba(random.randrange(1000, 1500), 200, random.randrange(1, 5))
-prvaRiba = Riba(random.randrange(1000, 1500), 200, random.randrange(1, 5))
-trecaRiba = Riba(random.randrange(1000, 1500), 200, 1)
-cetvrtaRiba = Riba(random.randrange(1000, 1500), 200, 3)
-petaRiba = Riba(random.randrange(1000, 1500), 200, random.randrange(1, 5))
-sestaRiba = Riba(random.randrange(1000, 1500), 200, 4)
+drugaRiba = Riba()
+prvaRiba = Riba()
+trecaRiba = Riba()
+cetvrtaRiba = Riba()
 
 score = 0
 
+#Text stuff
 font = pygame.font.SysFont("comicsansms", 22)
 text = font.render("Score 0"   , True, (255, 255, 255))
+
+
 game_exit = 0
+
 while not game_exit:
 
 		for event in pygame.event.get():
@@ -123,10 +142,11 @@ while not game_exit:
 		prvaRiba.draw_fish()
 		trecaRiba.draw_fish()
 		cetvrtaRiba.draw_fish()
-		petaRiba.draw_fish()
-		sestaRiba.draw_fish()
+		print (prvaRiba.speed_max)
+		print(prvaRiba.counter)
+
 		text = font.render("Score " +str(score)  , True, (255, 255, 255))
 		gameDisplay.blit(text, ( 450, 5))
 
 		pygame.display.update()
-		clock.tick(105)
+		clock.tick(80)
