@@ -117,8 +117,9 @@ score = 0
 
 #Text stuff
 font = pygame.font.SysFont("comicsansms", 22)
-text = font.render("Score 0"   , True, (255, 255, 255))
-
+score_text = font.render("Score 0"   , True, (255, 255, 255))
+level_text = font.render("Fish speed 2"   , True, (255, 255, 255))
+		 
 
 game_exit = 0
 
@@ -145,8 +146,10 @@ while not game_exit:
 		print (prvaRiba.speed_max)
 		print(prvaRiba.counter)
 
-		text = font.render("Score " +str(score)  , True, (255, 255, 255))
-		gameDisplay.blit(text, ( 450, 5))
+		level_text = font.render("Fish speed " + str((prvaRiba.speed_max + prvaRiba.speed_min)/2)   , True, (255, 255, 255))
+		score_text = font.render("Score " +str(score)  , True, (255, 255, 255))
+		gameDisplay.blit(score_text, ( 450, 5))
+		gameDisplay.blit(level_text, ( 100, 5))
 
 		pygame.display.update()
 		clock.tick(80)
